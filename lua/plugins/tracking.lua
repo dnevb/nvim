@@ -1,11 +1,12 @@
+local pomodoro_state = false
+
 return {
   {
-
     "wthollingsworth/pomodoro.nvim",
     requires = "MunifTanjim/nui.nvim",
     config = function()
       require("pomodoro").setup({
-        time_work = 30,
+        time_work = 25,
         time_break_short = 5,
         time_break_long = 20,
         timers_to_long_break = 4,
@@ -13,25 +14,24 @@ return {
     end,
     keys = {
       {
-        "<leader>pr",
+        "<leader>tp",
         function()
-          require("pomodoro").start()
+          if pomodoro_state then
+            require("pomodoro").stop()
+            pomodoro_state = false
+          else
+            require("pomodoro").start()
+            pomodoro_state = true
+          end
         end,
-        desc = "Start pomodoro",
+        desc = "Toggle pomodoro",
       },
       {
-        "<leader>pi",
+        "<leader>ts",
         function()
           require("pomodoro").status()
         end,
         desc = "Show pomodoro status",
-      },
-      {
-        "<leader>ps",
-        function()
-          require("pomodoro").stop()
-        end,
-        desc = "Stop pomodoro",
       },
     },
   },
@@ -50,12 +50,11 @@ return {
       return opts
     end,
   },
-
   {
     "folke/which-key.nvim",
     opts = {
       defaults = {
-        ["<leader>p"] = { name = "+pomodoro" },
+        ["<leader>t"] = { name = "+tracking" },
       },
     },
   },
