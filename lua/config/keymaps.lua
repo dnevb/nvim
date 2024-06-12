@@ -5,4 +5,4 @@ vim.keymap.set("n", "<C-/>", function()
   LazyVim.terminal(nil, { border = "rounded" })
 end, { desc = "Term with border" })
 
-vim.keymap.set("n", "<leader>d", "<cmd>BufferLinePickClose<cr>", { desc = "Close buffer" })
+-- vim.keymap.set("n", "<leader>r", LazyVim.ui.bufremove, { desc = "Close buffer" })
