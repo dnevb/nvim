@@ -1,7 +1,6 @@
 local map = vim.keymap.set
 
 map("n", ";", ":", { desc = "CMD enter command mode" })
-map("i", "jk", "<ESC>")
 
 map("i", "<C-b>", "<ESC>^i", { desc = "move beginning of line" })
 map("i", "<C-e>", "<End>", { desc = "move end of line" })
@@ -28,6 +27,10 @@ map("n", "<leader>cf", function()
 end, { desc = "format files" })
 
 map("n", "<leader>qq", "<cmd>qa<cr>", { desc = 'Quit' })
+
+-- better indenting
+map("v", "<", "<gv")
+map("v", ">", ">gv")
 
 -- global lsp mappings
 map("n", "<leader>ds", vim.diagnostic.setloclist, { desc = "lsp diagnostic loclist" })
@@ -60,7 +63,7 @@ map("n", "<C-n>", "<cmd>NvimTreeToggle<CR>", { desc = "nvimtree toggle window" }
 map("n", "<leader>e", "<cmd>NvimTreeFocus<CR>", { desc = "nvimtree focus window" })
 
 -- git
-map("n", "<leader>gt", "<cmd>Telescope git_status<CR>", { desc = "telescope git status" })
+map("n", "<leader>gs", "<cmd>Telescope git_status<CR>", { desc = "telescope git status" })
 map("n", "<leader>gc", "<cmd>Telescope git_commits<CR>", { desc = "telescope git commits" })
 map({ "n", "t" }, "<A-g>", function()
   require("nvchad.term").toggle { pos = "float", cmd = 'lazygit' }
@@ -74,9 +77,7 @@ map("n", "<leader>fB", "<cmd>Telescope buffers<CR>", { desc = "telescope find bu
 map("n", "<leader>fh", "<cmd>Telescope help_tags<CR>", { desc = "telescope help page" })
 map("n", "<leader>fm", "<cmd>Telescope marks<CR>", { desc = "telescope find marks" })
 map("n", "<leader>fc", "<cmd>Telescope themes<CR>", { desc = "telescope nvchad themes" })
-map("n", "<leader>ft", function() require("todo-comments.fzf").todo() end, { desc = "Todo" })
-map("n", "<leader>sT", function() require("todo-comments.fzf").todo({ keywords = { "TODO", "FIX", "FIXME" } }) end,
-  { desc = "Todo/Fix/Fixme" })
+map("n", "<leader>ft", "<cmd>Telescope todo-comments", { desc = "Todo" })
 map("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { desc = "telescope find files" })
 map("n", "<leader><space>", "<cmd>Telescope find_files<cr>", { desc = "telescope find files" })
 map(
@@ -85,6 +86,16 @@ map(
   "<cmd>Telescope find_files follow=true no_ignore=true hidden=true<CR>",
   { desc = "telescope find all files" }
 )
+
+map("n", "<leader>fs", function()
+  require('telescope.builtin').lsp_document_symbols()
+end, { desc = "Document symbols" })
+map("n", "<leader>fS", function()
+  require('telescope.builtin').workspace_symbols()
+end, { desc = "Wokspace symbols" })
+
+map("n", "<leader>sd", "<cmd>Telescope diagnostics bufnr=0<cr>", { desc = "Document Diagnostics" })
+map("n", "<leader>sD", "<cmd>Telescope diagnostics<cr>", { desc = "Workspace Diagnostics" })
 
 -- terminal
 map("t", "<C-x>", "<C-\\><C-N>", { desc = "terminal escape terminal mode" })
