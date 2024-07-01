@@ -3,14 +3,14 @@
 return {
 
   ui = {
-    theme = "onedark",
+    theme = "tokyonight",
   },
   term = {
     float = {
-      row = 0.1,
-      col = 0.15,
-      width = 0.7,
-      height = 0.7,
+      row = 0.05,
+      col = 0.05,
+      width = 0.9,
+      height = 0.8,
     },
   }
 }

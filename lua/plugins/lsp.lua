@@ -3,9 +3,15 @@ return {
     'VonHeikemen/lsp-zero.nvim',
     config = function()
       local lsp_zero = require('lsp-zero')
+      local map = vim.keymap.set
 
       lsp_zero.on_attach(function(client, bufnr)
-        lsp_zero.default_keymaps({ buffer = bufnr })
+        lsp_zero.default_keymaps({
+          buffer = bufnr,
+          preserve_mappings = false
+        })
+        map('n', 'gr', '<cmd>Telescope lsp_references<cr>', { buffer = bufnr })
+        map('n', 'gd', '<cmd>Telescope lsp_definitions<cr>', { buffer = bufnr })
       end)
 
       -- technically these are "diagnostic signs"

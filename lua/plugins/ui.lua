@@ -65,10 +65,26 @@ return {
     cmd = "WhichKey",
     config = function(_, opts)
       dofile(vim.g.base46_cache .. "whichkey")
-      require("which-key").setup(opts)
+      local wk = require("which-key")
+      wk.setup(opts)
+      wk.register(opts.defaults)
     end,
+    opts = {
+      defaults = {
+        ["<leader>b"] = { name = '+Buffers' },
+        ["<leader>c"] = { name = '+Code' },
+        ["<leader>d"] = { name = '+Diagnosis' },
+        ["<leader>f"] = { name = '+Find' },
+        ["<leader>g"] = { name = '+Git' },
+        ["<leader>q"] = { name = '+Project' },
+      }
+    }
   },
-
+  {
+    "windwp/nvim-ts-autotag",
+    event = "BufReadPost",
+    opts = {},
+  },
   "nvim-lua/plenary.nvim",
   {
     "nvim-treesitter/nvim-treesitter",

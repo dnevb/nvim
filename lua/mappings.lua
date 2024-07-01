@@ -1,7 +1,6 @@
 local map = vim.keymap.set
 
 map("n", ";", ":", { desc = "CMD enter command mode" })
-map("i", "jk", "<ESC>")
 
 map("i", "<C-b>", "<ESC>^i", { desc = "move beginning of line" })
 map("i", "<C-e>", "<End>", { desc = "move end of line" })
@@ -23,14 +22,20 @@ map("n", "<C-c>", "<cmd>%y+<CR>", { desc = "file copy whole" })
 map("n", "<leader>n", "<cmd>set rnu!<CR>", { desc = "toggle relative number" })
 map("n", "<leader>ch", "<cmd>NvCheatsheet<CR>", { desc = "toggle nvcheatsheet" })
 
+-- Code
 map("n", "<leader>cf", function()
   require("conform").format { lsp_fallback = true }
 end, { desc = "format files" })
+map("n", "<leader>cm", "<cmd>Mason<cr>", { desc = 'Mason' })
 
-map("n", "<leader>qq", "<cmd>qa<cr>", { desc = 'Quit' })
+-- Session
+map("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit" })
+map("n", "<leader>qs", function() require("persistence").load({ last = true }) end, { desc = "Restore Last Session" })
+map("n", "<leader>ql", function() require("persistence").stop() end, { desc = "Don't Save Current Session" })
 
--- global lsp mappings
-map("n", "<leader>ds", vim.diagnostic.setloclist, { desc = "lsp diagnostic loclist" })
+-- better indenting
+map("v", "<", "<gv")
+map("v", ">", ">gv")
 
 -- tabufline
 map("n", "<leader>bl", function()
@@ -60,10 +65,16 @@ map("n", "<C-n>", "<cmd>NvimTreeToggle<CR>", { desc = "nvimtree toggle window" }
 map("n", "<leader>e", "<cmd>NvimTreeFocus<CR>", { desc = "nvimtree focus window" })
 
 -- git
-map("n", "<leader>gt", "<cmd>Telescope git_status<CR>", { desc = "telescope git status" })
+map("n", "<leader>gs", "<cmd>Telescope git_status<CR>", { desc = "telescope git status" })
 map("n", "<leader>gc", "<cmd>Telescope git_commits<CR>", { desc = "telescope git commits" })
-map({ "n", "t" }, "<A-g>", function()
-  require("nvchad.term").toggle { pos = "float", cmd = 'lazygit' }
+map({ "n", "t" }, "<leader>gg", function()
+  local term = require("nvchad.term")
+  term.toggle { id = 'lgit', pos = "float", cmd = 'lazygit', float_opts = {
+    border = 'double'
+  } }
+  map("t", "q", function()
+    term.toggle { id = 'lgit' }
+  end)
 end, { desc = "LazyGit" })
 
 -- telescope
@@ -74,9 +85,7 @@ map("n", "<leader>fB", "<cmd>Telescope buffers<CR>", { desc = "telescope find bu
 map("n", "<leader>fh", "<cmd>Telescope help_tags<CR>", { desc = "telescope help page" })
 map("n", "<leader>fm", "<cmd>Telescope marks<CR>", { desc = "telescope find marks" })
 map("n", "<leader>fc", "<cmd>Telescope themes<CR>", { desc = "telescope nvchad themes" })
-map("n", "<leader>ft", function() require("todo-comments.fzf").todo() end, { desc = "Todo" })
-map("n", "<leader>sT", function() require("todo-comments.fzf").todo({ keywords = { "TODO", "FIX", "FIXME" } }) end,
-  { desc = "Todo/Fix/Fixme" })
+map("n", "<leader>ft", "<cmd>Telescope todo-comments<cr>", { desc = "Todo" })
 map("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { desc = "telescope find files" })
 map("n", "<leader><space>", "<cmd>Telescope find_files<cr>", { desc = "telescope find files" })
 map(
@@ -86,19 +95,14 @@ map(
   { desc = "telescope find all files" }
 )
 
+map("n", "<leader>fs", "<cmd>Telescope lsp_document_symbols<cr>", { desc = "Document symbols" })
+map("n", "<leader>fS", "<cmd>Telescope treesitter<cr>", { desc = "Treesitter symbols" })
+
+map("n", "<leader>fd", "<cmd>Telescope diagnostics bufnr=0<cr>", { desc = "Document Diagnostics" })
+map("n", "<leader>fD", "<cmd>Telescope diagnostics<cr>", { desc = "Workspace Diagnostics" })
+
 -- terminal
 map("t", "<C-x>", "<C-\\><C-N>", { desc = "terminal escape terminal mode" })
-
--- new terminals
-map("n", "<leader>h", function()
-  require("nvchad.term").new { pos = "sp" }
-end, { desc = "terminal new horizontal term" })
-
-map("n", "<leader>v", function()
-  require("nvchad.term").new { pos = "vsp" }
-end, { desc = "terminal new vertical window" })
-
--- toggleable
 
 map({ "n", "t" }, "<A-h>", function()
   require("nvchad.term").toggle { pos = "sp", id = "htoggleTerm" }
@@ -107,13 +111,6 @@ end, { desc = "terminal new horizontal term" })
 map({ "n", "t" }, "<A-t>", function()
   require("nvchad.term").toggle { pos = "float", id = "floatTerm" }
 end, { desc = "terminal toggle floating term" })
-
--- whichkey
-map("n", "<leader>wK", "<cmd>WhichKey <CR>", { desc = "whichkey all keymaps" })
-
-map("n", "<leader>wk", function()
-  vim.cmd("WhichKey " .. vim.fn.input "WhichKey: ")
-end, { desc = "whichkey query lookup" })
 
 -- blankline
 map("n", "<leader>cc", function()
